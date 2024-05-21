@@ -16,7 +16,7 @@ const Post = () => {
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
   const [open, setOpen] = useState(false);
-  const [newPost, setNewPost] = useState({ id: '', title: '', body: '' });
+  const [newPost, setNewPost] = useState({ title: '', body: '' });
   const [commentInputs, setCommentInputs] = useState({});
   const [showCommentInput, setShowCommentInput] = useState({});
 
@@ -57,7 +57,7 @@ const Post = () => {
     e.preventDefault();
     const newItems = [...items, { ...newPost }];
     setItems(newItems);
-    setNewPost({ id: '', title: '', body: '' });
+    setNewPost({  title: '', body: '' });
   };
 
   const handleAddComment = (postId) => {

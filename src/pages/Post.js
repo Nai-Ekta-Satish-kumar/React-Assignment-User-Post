@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { Box, Typography, Button, TextField, Modal } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import CommentIcon from '@mui/icons-material/Comment';
-import SaveIcon from '@mui/icons-material/Save';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchPosts, addPost, deletePost, editPost, addComment } from '../redux/reducer/PostsSlice';
+import { Card, CardContent, Box, Typography, Button, TextField, Modal } from '@mui/material';
+import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon, Comment as CommentIcon, Save as SaveIcon } from '@mui/icons-material';
 const Post = () => {
-  const [items, setItems] = useState([]);
-  const [comments, setComments] = useState({});
+  const dispatch = useDispatch();
+  const items = useSelector(state => state.posts.items);
   const [editItem, setEditItem] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
@@ -19,63 +13,42 @@ const Post = () => {
   const [newPost, setNewPost] = useState({ title: '', body: '' });
   const [commentInputs, setCommentInputs] = useState({});
   const [showCommentInput, setShowCommentInput] = useState({});
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const url = "https://jsonplaceholder.typicode.com/posts";
-        const response = await axios.get(url);
-        setItems(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
-
+    const storedPosts = JSON.parse(localStorage.getItem('posts'));
+    if (storedPosts) {
+      dispatch({ type: 'posts/fetchPosts/fulfilled', payload: storedPosts });
+    } else {
+      dispatch(fetchPosts());
+    }
+  }, [dispatch]);
   const handleDelete = (id) => {
-    const updatedItems = items.filter(item => item.id !== id);
-    setItems(updatedItems);
+    dispatch(deletePost(id));
   };
-
   const handleEdit = (item) => {
     setEditItem(item);
     setEditTitle(item.title);
     setEditBody(item.body);
     setOpen(true);
   };
-
   const handleUpdate = () => {
-    const updatedItems = items.map(item =>
-      item.id === editItem.id ? { ...item, title: editTitle, body: editBody } : item
-    );
-    setItems(updatedItems);
+    dispatch(editPost({ ...editItem, title: editTitle, body: editBody }));
     setOpen(false);
   };
-
   const handleAddPost = (e) => {
     e.preventDefault();
-    const newItems = [...items, { ...newPost }];
-    setItems(newItems);
-    setNewPost({  title: '', body: '' });
+    dispatch(addPost({ title: newPost.title, body: newPost.body }));
+    setNewPost({ title: '', body: '' });
   };
-
   const handleAddComment = (postId) => {
     const commentText = commentInputs[postId];
     if (!commentText.trim()) return;
-
-    setComments(prevComments => ({
-      ...prevComments,
-      [postId]: [...(prevComments[postId] || []), commentText]
-    }));
+    dispatch(addComment({ postId, comment: commentText }));
     setCommentInputs(prev => ({ ...prev, [postId]: '' }));
     setShowCommentInput(prev => ({ ...prev, [postId]: false }));
   };
-
   const handleCommentButtonClick = (postId) => {
     setShowCommentInput(prev => ({ ...prev, [postId]: true }));
   };
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2 }}>
       <form onSubmit={handleAddPost} style={{ marginBottom: '20px' }}>
@@ -95,7 +68,6 @@ const Post = () => {
           </Button>
         </Box>
       </form>
-
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
         {items.map((item) => (
           <Card key={item.id} sx={{ flex: '1 1 300px', margin: 2, display: 'flex', flexDirection: 'column' }}>
@@ -107,7 +79,7 @@ const Post = () => {
                 <div className='container'>{item.body}</div>
               </Typography>
               <Box mt={2}>
-                {comments[item.id] && comments[item.id].map((comment, index) => (
+                {item.comments && item.comments.map((comment, index) => (
                   <Typography key={index} variant="body2" color="textSecondary">{comment}</Typography>
                 ))}
                 {showCommentInput[item.id] && (
@@ -141,7 +113,6 @@ const Post = () => {
           </Card>
         ))}
       </Box>
-
       <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -185,5 +156,4 @@ const Post = () => {
     </Box>
   );
 };
-
 export default Post;

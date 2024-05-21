@@ -19,6 +19,7 @@ const Navbar = () => {
   useEffect(() => {
     setLoggedInUser(user);
   }, [user]);
+  
 
   const handleLogout = () => {
     logout();

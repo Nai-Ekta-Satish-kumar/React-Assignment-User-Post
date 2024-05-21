@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="sticky" sx={{ background: "grey" }}>
+    <AppBar position="sticky" sx={{ background: "black" }}>
       <Toolbar>
         {loggedInUser && (
           <>
@@ -61,16 +61,16 @@ const Navbar = () => {
               <Button
                 component={Link}
                 to="/"
-                variant="contained"
-                sx={{ margin: 1, borderRadius: 10 }}
+                variant="outlined"
+                sx={{ margin: 1, borderRadius: 10,color:'cyan' }}
               >
                 Login
               </Button>
               <Button
                 component={Link}
                 to="/signup"
-                variant="contained"
-                sx={{ margin: 1, borderRadius: 10 }}
+                variant="outlined"
+                sx={{ margin: 1, borderRadius: 10,color:'cyan' }}
               >
                 SignUp
               </Button>
@@ -79,10 +79,11 @@ const Navbar = () => {
         </Box>
         {loggedInUser && (
           <Button
-            variant="contained"
+            variant="outlined"
             size="small"
-            sx={{ marginX: 1, borderRadius: 10 }}
+            sx={{ marginX: 1, borderRadius: 10,color:'cyan' }}
             onClick={handleLogout}
+          
           >
             Logout
           </Button>

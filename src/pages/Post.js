@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Box, Typography, Button, TextField, Modal } from '@mui/material';
+import { Box, Typography, Button, TextField, Modal, Grid } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -74,7 +74,7 @@ const Post = () => {
             value={newPost.body}
             onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
           />
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="secondary">
            <AddIcon />
           </Button>
         </Box>
@@ -93,13 +93,20 @@ const Post = () => {
               <Typography gutterBottom variant="body2" component="div">
                 <div className='container'>{item.body}</div>
               </Typography>
-              <Button sx={{marginLeft:'150px' ,marginBottom:'auto',}} variant="contained" color="primary" onClick={() => handleEdit(item)}>
+              <Grid
+                        container
+                        spacing={0}
+                        justifyContent="center"
+                        
+                      >
+              <Button sx={{marginLeft:'150px' ,marginBottom:'auto',}} variant="outlined" color="primary" onClick={() => handleEdit(item)}>
              <EditIcon />
-
               </Button>
-              <Button variant="contained" color="secondary" onClick={() => handleDelete(item.id)}>
+              <Grid item xs={2} md={3}>
+              <Button variant="outlined" color="error" onClick={() => handleDelete(item.id)}>
               <DeleteIcon/>
-              </Button>
+              </Button></Grid>
+              </Grid>
             </CardContent>
           </Card>
         ))}

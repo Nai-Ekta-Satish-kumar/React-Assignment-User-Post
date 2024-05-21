@@ -45,8 +45,6 @@ const Signup = () => {
     ).toString();
     data.password = encryptedPassword;
     users.push(data);
-    localStorage.setItem("users", JSON.stringify(users));
-
     signup(data);
     toast.success(SIGNUP_SUCCESS);
     navigate("/");

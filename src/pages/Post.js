@@ -13,6 +13,7 @@ const Post = () => {
   const [newPost, setNewPost] = useState({ title: '', body: '' });
   const [commentInputs, setCommentInputs] = useState({});
   const [showCommentInput, setShowCommentInput] = useState({});
+
   useEffect(() => {
     const storedPosts = JSON.parse(localStorage.getItem('posts'));
     if (storedPosts) {
@@ -49,6 +50,10 @@ const Post = () => {
   const handleCommentButtonClick = (postId) => {
     setShowCommentInput(prev => ({ ...prev, [postId]: true }));
   };
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+console.log(users)
+  const user = users.map(user => user.name);
+  console.log(user);
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2 }}>
       <form onSubmit={handleAddPost} style={{ marginBottom: '20px' }}>
@@ -80,7 +85,7 @@ const Post = () => {
               </Typography>
               <Box mt={2}>
                 {item.comments && item.comments.map((comment, index) => (
-                  <Typography key={index} variant="body2" color="textSecondary">{comment}</Typography>
+                  <Typography key={index} variant="body1" color="textSecondary">{user}:{comment}</Typography>
                 ))}
                 {showCommentInput[item.id] && (
                   <Box mt={1} display="flex" alignItems="center">

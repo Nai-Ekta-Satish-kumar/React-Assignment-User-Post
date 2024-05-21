@@ -121,8 +121,9 @@ const Login = () => {
             {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
             <Button
               type="submit"
-              variant="contained"
-              sx={{ borderRadius: 3, marginTop: 2, marginBottom: 2 }}
+              variant="outlined"
+              sx={{ borderRadius: 3, marginTop: 2, marginBottom: 2,color:'black' }}
+              
             >
               Submit
             </Button>

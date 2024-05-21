@@ -99,10 +99,12 @@ const Post = () => {
                         justifyContent="center"
                         
                       >
+                         <Grid item xs={2} md={3}>
               <Button sx={{marginLeft:'150px' ,marginBottom:'auto',}} variant="outlined" color="primary" onClick={() => handleEdit(item)}>
              <EditIcon />
-              </Button>
-              <Grid item xs={2} md={3}>
+              </Button></Grid>
+             
+              <Grid item xs={1}>
               <Button variant="outlined" color="error" onClick={() => handleDelete(item.id)}>
               <DeleteIcon/>
               </Button></Grid>

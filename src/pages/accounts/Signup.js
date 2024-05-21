@@ -71,14 +71,15 @@ const Signup = () => {
             alignItems="center"
             justifyContent="center"
             boxShadow="10px 10px 20px #ccd"
-            padding={3}
+            padding={1}
             margin="auto"
             marginTop={5}
             borderRadius={5}
           >
-            <Typography variant="h4" padding={3} textAlign="center">
+            <Typography variant="h4" padding={2} textAlign="center">
               Signup
             </Typography>
+            
             <TextField
               name="fname"
               type="name"
@@ -180,7 +181,7 @@ const Signup = () => {
               error={!!formErrors.cpassword}
               helperText={formErrors.cpassword?.message}
             />
-            <Button type="submit" variant="contained" margin="normal">
+            <Button type="submit" variant="outlined"  margin="normal">
               Submit
             </Button>
           </Box>

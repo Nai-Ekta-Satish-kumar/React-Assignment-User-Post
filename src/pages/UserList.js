@@ -51,45 +51,47 @@ const UserList = () => {
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, padding: 2 }}>
       {items.map((item) => (
         <Card key={item.id} sx={{ flex: '1 1 300px', margin: 2 }} onClick={() => handleCardClick(item.id)}>
-          <CardContent>
+          <CardContent sx={{display:'inline',marginLeft:"1px"}}>
             <Typography gutterBottom variant="h6" component="div">
               {item.id}
             </Typography>
             <Typography gutterBottom variant="h5" component="div">
               {item.name}
             </Typography>
-            <Typography gutterBottom variant="body2" component="div">
+            <Typography gutterBottom variant="title" component="div">
               <div className='container'><strong>User name:</strong> {item.username}</div>
             </Typography>
-            <Typography gutterBottom variant="body2" component="div">
+            <Typography gutterBottom variant="title" component="div">
               <div className='container'><strong>Phone:</strong> {item.phone}</div>
             </Typography>
-            <Typography gutterBottom variant="body2" component="div">
+            <Typography gutterBottom variant="title" component="div">
               <div className='container'><strong>Website:</strong> {item.website}</div>
             </Typography>
             <Typography gutterBottom variant="body2" component="div">
               <div className='container'>
-                <strong>Company:</strong>
-                <div>name: {item.company.name}</div>
-                <div>catchPhrase: {item.company.catchPhrase}</div>
-                <div>bs: {item.company.bs}</div>
-              </div>
-            </Typography>
-            <Typography gutterBottom variant="body2" component="div">
-              <div className='container'>
-                <strong>Address:</strong>
+              <Typography gutterBottom variant="h6" component="div"><strong>Address:</strong></Typography>
                 <div>Street: {item.address.street}</div>
                 <div>Suite: {item.address.suite}</div>
                 <div>City: {item.address.city}</div>
                 <div>Zipcode: {item.address.zipcode}</div>
               </div>
             </Typography>
+            <Typography gutterBottom variant="title" component="div">
+              <div className='container'>
+              <Typography gutterBottom variant="h6" component="div"><strong>Company:</strong></Typography>
+                
+                <div>name: {item.company.name}</div>
+                <div>catchPhrase: {item.company.catchPhrase}</div>
+                <div>bs: {item.company.bs}</div>
+              </div>
+            </Typography>
+            
           </CardContent>
         </Card>
       ))}
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>User Details</DialogTitle>
+        <DialogTitle><Typography variant="h4" sx={{ marginTop: 2 }}>User Details</Typography></DialogTitle>
         <DialogContent>
           {loading ? (
             <CircularProgress />

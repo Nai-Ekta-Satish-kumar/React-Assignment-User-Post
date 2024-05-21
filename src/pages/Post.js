@@ -2,17 +2,23 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Box, Typography, Button, TextField, Modal, Grid } from '@mui/material';
+import { Box, Typography, Button, TextField, Modal } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import CommentIcon from '@mui/icons-material/Comment';
+import SaveIcon from '@mui/icons-material/Save';
+
 const Post = () => {
   const [items, setItems] = useState([]);
+  const [comments, setComments] = useState({});
   const [editItem, setEditItem] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
   const [open, setOpen] = useState(false);
   const [newPost, setNewPost] = useState({ id: '', title: '', body: '' });
+  const [commentInputs, setCommentInputs] = useState({});
+  const [showCommentInput, setShowCommentInput] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,7 +26,6 @@ const Post = () => {
         const url = "https://jsonplaceholder.typicode.com/posts";
         const response = await axios.get(url);
         setItems(response.data);
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -41,7 +46,7 @@ const Post = () => {
   };
 
   const handleUpdate = () => {
-    const updatedItems = items.map(item => 
+    const updatedItems = items.map(item =>
       item.id === editItem.id ? { ...item, title: editTitle, body: editBody } : item
     );
     setItems(updatedItems);
@@ -55,15 +60,26 @@ const Post = () => {
     setNewPost({ id: '', title: '', body: '' });
   };
 
+  const handleAddComment = (postId) => {
+    const commentText = commentInputs[postId];
+    if (!commentText.trim()) return;
+
+    setComments(prevComments => ({
+      ...prevComments,
+      [postId]: [...(prevComments[postId] || []), commentText]
+    }));
+    setCommentInputs(prev => ({ ...prev, [postId]: '' }));
+    setShowCommentInput(prev => ({ ...prev, [postId]: false }));
+  };
+
+  const handleCommentButtonClick = (postId) => {
+    setShowCommentInput(prev => ({ ...prev, [postId]: true }));
+  };
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2 }}>
       <form onSubmit={handleAddPost} style={{ marginBottom: '20px' }}>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <TextField
-            label="ID"
-            value={newPost.id}
-            onChange={(e) => setNewPost({ ...newPost, id: e.target.value })}
-          />
           <TextField
             label="Title"
             value={newPost.title}
@@ -75,41 +91,53 @@ const Post = () => {
             onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
           />
           <Button type="submit" variant="contained" color="secondary">
-           <AddIcon />
+            <AddIcon />
           </Button>
         </Box>
       </form>
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
         {items.map((item) => (
-          <Card key={item.id} sx={{ flex: '1 1 300px', margin: 2 }}>
-            <CardContent>
+          <Card key={item.id} sx={{ flex: '1 1 300px', margin: 2, display: 'flex', flexDirection: 'column' }}>
+            <CardContent sx={{ flexGrow: 1 }}>
               <Typography gutterBottom variant="h6" component="div">
-                {item.id}
+                <strong>{item.title}</strong>
               </Typography>
-              <Typography gutterBottom variant="h5" component="div">
-                {item.title}
-              </Typography>
-              <Typography gutterBottom variant="body2" component="div">
+              <Typography gutterBottom variant="body1" component="div">
                 <div className='container'>{item.body}</div>
               </Typography>
-              <Grid
-                        container
-                        spacing={0}
-                        justifyContent="center"
-                        
-                      >
-                         <Grid item xs={2} md={3}>
-              <Button sx={{marginLeft:'150px' ,marginBottom:'auto',}} variant="outlined" color="primary" onClick={() => handleEdit(item)}>
-             <EditIcon />
-              </Button></Grid>
-             
-              <Grid item xs={1}>
-              <Button variant="outlined" color="error" onClick={() => handleDelete(item.id)}>
-              <DeleteIcon/>
-              </Button></Grid>
-              </Grid>
+              <Box mt={2}>
+                {comments[item.id] && comments[item.id].map((comment, index) => (
+                  <Typography key={index} variant="body2" color="textSecondary">{comment}</Typography>
+                ))}
+                {showCommentInput[item.id] && (
+                  <Box mt={1} display="flex" alignItems="center">
+                    <TextField
+                      fullWidth
+                      variant="outlined"
+                      size="small"
+                      label="Add a comment"
+                      value={commentInputs[item.id] || ''}
+                      onChange={(e) => setCommentInputs(prev => ({ ...prev, [item.id]: e.target.value }))}
+                    />
+                    <Button onClick={() => handleAddComment(item.id)} variant="contained" color="primary" sx={{ ml: 1 }}>
+                      <AddIcon />
+                    </Button>
+                  </Box>
+                )}
+              </Box>
             </CardContent>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: 2, borderTop: '1px solid #ddd' }}>
+              <Button variant="outlined" color="primary" onClick={() => handleCommentButtonClick(item.id)}>
+                <CommentIcon />
+              </Button>
+              <Button variant="outlined" color="primary" onClick={() => handleEdit(item)}>
+                <EditIcon />
+              </Button>
+              <Button variant="outlined" color="error" onClick={() => handleDelete(item.id)}>
+                <DeleteIcon />
+              </Button>
+            </Box>
           </Card>
         ))}
       </Box>
@@ -120,15 +148,15 @@ const Post = () => {
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
       >
-        <Box sx={{ 
-          position: 'absolute', 
-          top: '50%', 
-          left: '50%', 
-          transform: 'translate(-50%, -50%)', 
-          width: 400, 
-          bgcolor: 'background.paper', 
-          boxShadow: 24, 
-          p: 4 
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4
         }}>
           <Typography id="modal-title" variant="h6" component="h2">
             Edit Post
@@ -150,7 +178,7 @@ const Post = () => {
             onChange={(e) => setEditBody(e.target.value)}
           />
           <Button variant="contained" color="primary" onClick={handleUpdate}>
-            Save
+            <SaveIcon />
           </Button>
         </Box>
       </Modal>

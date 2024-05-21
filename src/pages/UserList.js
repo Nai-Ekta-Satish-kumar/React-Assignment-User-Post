@@ -1,7 +1,9 @@
 import { Box, Card, CardContent, Typography, Dialog, DialogTitle, DialogContent, List, ListItem, ListItemText, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-
+import { AiOutlinePhone } from "react-icons/ai";
+import { BsGlobe2 } from "react-icons/bs";
+import {  MdOutlineMail } from "react-icons/md";
 const UserList = () => {
   const [items, setItems] = useState([]);
   const [albums, setAlbums] = useState([]);
@@ -15,9 +17,7 @@ const UserList = () => {
         const url = "https://jsonplaceholder.typicode.com/users";
         const response = await axios.get(url);
         setItems(response.data);
-        console.log(response.data);
       } catch (error) {
-        console.log(error);
       }
     };
     fetchData();
@@ -33,8 +33,7 @@ const UserList = () => {
       ]);
       setAlbums(albumsResponse.data);
       setTodos(todosResponse.data);
-      console.log(albumsResponse.data);
-      console.log(todosResponse.data);
+
     } catch (error) {
       console.log(error);
     }
@@ -51,41 +50,35 @@ const UserList = () => {
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, padding: 2 }}>
       {items.map((item) => (
         <Card key={item.id} sx={{ flex: '1 1 300px', margin: 2 }} onClick={() => handleCardClick(item.id)}>
-          <CardContent sx={{display:'inline',marginLeft:"1px"}}>
-            <Typography gutterBottom variant="h6" component="div">
-              {item.id}
-            </Typography>
+          <CardContent sx={{ textAlign: 'left' }}>
             <Typography gutterBottom variant="h5" component="div">
               {item.name}
             </Typography>
             <Typography gutterBottom variant="title" component="div">
-              <div className='container'><strong>User name:</strong> {item.username}</div>
+              <div><strong>User name:</strong> {item.username}</div>
             </Typography>
             <Typography gutterBottom variant="title" component="div">
-              <div className='container'><strong>Phone:</strong> {item.phone}</div>
+              <div><AiOutlinePhone /> {item.phone}</div>
             </Typography>
             <Typography gutterBottom variant="title" component="div">
-              <div className='container'><strong>Website:</strong> {item.website}</div>
+              <div><MdOutlineMail /> {item.email}</div>
+            </Typography>
+            <Typography gutterBottom variant="title" component="div">
+              <div><BsGlobe2 /> {item.website}</div>
             </Typography>
             <Typography gutterBottom variant="body2" component="div">
-              <div className='container'>
-              <Typography gutterBottom variant="h6" component="div"><strong>Address:</strong></Typography>
-                <div>Street: {item.address.street}</div>
-                <div>Suite: {item.address.suite}</div>
-                <div>City: {item.address.city}</div>
-                <div>Zipcode: {item.address.zipcode}</div>
-              </div>
+              <Typography variant="h6" component="div"><strong>Address:</strong></Typography>
+              <div>Street: {item.address.street}</div>
+              <div>Suite: {item.address.suite}</div>
+              <div>City: {item.address.city}</div>
+              <div>Zipcode: {item.address.zipcode}</div>
             </Typography>
-            <Typography gutterBottom variant="title" component="div">
-              <div className='container'>
-              <Typography gutterBottom variant="h6" component="div"><strong>Company:</strong></Typography>
-                
-                <div>name: {item.company.name}</div>
-                <div>catchPhrase: {item.company.catchPhrase}</div>
-                <div>bs: {item.company.bs}</div>
-              </div>
+            <Typography gutterBottom variant="body2" component="div">
+              <Typography variant="h6" component="div"><strong>Company:</strong></Typography>
+              <div>name: {item.company.name}</div>
+              <div>catchPhrase: {item.company.catchPhrase}</div>
+              <div>bs: {item.company.bs}</div>
             </Typography>
-            
           </CardContent>
         </Card>
       ))}
@@ -97,7 +90,7 @@ const UserList = () => {
             <CircularProgress />
           ) : (
             <>
-              <Typography variant="h6">Albums</Typography>
+              <Typography variant="h6"><strong> Albums:</strong></Typography>
               <List>
                 {albums.map((album) => (
                   <ListItem key={album.id}>
@@ -105,7 +98,7 @@ const UserList = () => {
                   </ListItem>
                 ))}
               </List>
-              <Typography variant="h6" sx={{ marginTop: 2 }}>Todos</Typography>
+              <Typography variant="h6" sx={{ marginTop: 2 }}><strong>Todos:</strong></Typography>
               <List>
                 {todos.map((todo) => (
                   <ListItem key={todo.id}>

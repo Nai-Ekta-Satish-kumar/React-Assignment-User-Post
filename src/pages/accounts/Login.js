@@ -41,7 +41,6 @@ const Login = () => {
       if (decryptedPassword === password) {
         login(loggedInUser);
         setLoginSuccess(true,'true');
-        console.log(loggedInUser,"user login");
         navigate("/post");
         toast.success(LOGIN_SUCCESS);
         return;

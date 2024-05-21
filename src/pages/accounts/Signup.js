@@ -48,7 +48,6 @@ const Signup = () => {
     localStorage.setItem("users", JSON.stringify(users));
 
     signup(data);
-    console.log("Successful signup");
     toast.success(SIGNUP_SUCCESS);
     navigate("/");
   };

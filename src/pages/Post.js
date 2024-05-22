@@ -51,9 +51,7 @@ const Post = () => {
     setShowCommentInput(prev => ({ ...prev, [postId]: true }));
   };
   const users = JSON.parse(localStorage.getItem('users')) || [];
-console.log(users)
   const user = users.map(user => user.name);
-  console.log(user);
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2 }}>
       <form onSubmit={handleAddPost} style={{ marginBottom: '20px' }}>

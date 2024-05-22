@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { AuthContext } from "../../context/authContext";
+import { AuthContext } from "../../context/AuthContext.js";
 import {
   Email_REQUIRED,
   INVALID_EMAIL,
@@ -19,7 +19,7 @@ import {
   FNAME_REQUIRED,
   CONFIRM_PASSWORD_ERROR,
   EMAIL_EXIST,
-} from "../../constants/constants";
+} from "../../constants/Constants.js";
 
 const Signup = () => {
   const {
@@ -76,7 +76,7 @@ const Signup = () => {
             <Typography variant="h4" padding={2} textAlign="center">
               Signup
             </Typography>
-            
+
             <TextField
               name="fname"
               type="name"
@@ -178,7 +178,7 @@ const Signup = () => {
               error={!!formErrors.cpassword}
               helperText={formErrors.cpassword?.message}
             />
-            <Button type="submit" variant="outlined"  margin="normal">
+            <Button type="submit" variant="outlined" margin="normal">
               Submit
             </Button>
           </Box>

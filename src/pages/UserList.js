@@ -10,7 +10,6 @@ const UserList = () => {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,7 +21,6 @@ const UserList = () => {
     };
     fetchData();
   }, []);
-
   const handleCardClick = async (userId) => {
     setLoading(true);
     setOpen(true);
@@ -39,13 +37,11 @@ const UserList = () => {
     }
     setLoading(false);
   };
-
   const handleClose = () => {
     setOpen(false);
     setAlbums([]);
     setTodos([]);
   };
-
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, padding: 2 }}>
       {items.map((item) => (
@@ -82,7 +78,6 @@ const UserList = () => {
           </CardContent>
         </Card>
       ))}
-
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle><Typography variant="h4" sx={{ marginTop: 2 }}>User Details</Typography></DialogTitle>
         <DialogContent>
@@ -113,5 +108,4 @@ const UserList = () => {
     </Box>
   );
 };
-
 export default UserList;

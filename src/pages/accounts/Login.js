@@ -13,9 +13,9 @@ import {
   PASSWORD_MAXLENGTH,
   PASSWORD_MINLENGTH,
   PASSWORD_REQUIRED,
-} from "../../constants/constants.js";
+} from "../../constants/Constants.js";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { AuthContext } from "../../context/authContext";
+import { AuthContext } from "../../context/AuthContext.js";
 
 const Login = () => {
   const {
@@ -27,12 +27,11 @@ const Login = () => {
   const [loginSuccess, setLoginSuccess] = useState("false");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
   const onSubmit = (data) => {
     const { email, password } = data;
     const users = JSON.parse(localStorage.getItem("users")) || [];
-
     const loggedInUser = users.find((user) => user.email === email);
-
     if (loggedInUser) {
       const decryptedPassword = CryptoJS.AES.decrypt(
         loggedInUser.password,
@@ -40,16 +39,21 @@ const Login = () => {
       ).toString(CryptoJS.enc.Utf8);
       if (decryptedPassword === password) {
         login(loggedInUser);
-        setLoginSuccess(true,'true');
+        setLoginSuccess(true, "true");
         navigate("/post");
         toast.success(LOGIN_SUCCESS);
         return;
       }
     }
-
     let errorMessage = "";
     const userWithEmail = users.find((user) => user.email === email);
-    const userWithPassword = users.find((user) => user.password === password);
+    const userWithPassword = users.find((user) => {
+      const decryptedPassword = CryptoJS.AES.decrypt(
+        user.password,
+        "secret-key"
+      ).toString(CryptoJS.enc.Utf8);
+      return decryptedPassword === password;
+    });
     if (!userWithEmail && !userWithPassword) {
       errorMessage = INVALID_CREDENTIALS;
       toast.error(INVALID_CREDENTIALS);
@@ -96,7 +100,6 @@ const Login = () => {
               error={!!formErrors.email}
               helperText={formErrors.email?.message}
             />
-
             <TextField
               name="password"
               type="password"
@@ -121,8 +124,12 @@ const Login = () => {
             <Button
               type="submit"
               variant="outlined"
-              sx={{ borderRadius: 3, marginTop: 2, marginBottom: 2,color:'black' }}
-              
+              sx={{
+                borderRadius: 3,
+                marginTop: 2,
+                marginBottom: 2,
+                color: "black",
+              }}
             >
               Submit
             </Button>

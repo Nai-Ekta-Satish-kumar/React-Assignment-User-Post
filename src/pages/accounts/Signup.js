@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { AuthContext } from "../../context/AuthContext.js";
+import { AuthContext } from "../../context/authContext.js";
 import {
   Email_REQUIRED,
   INVALID_EMAIL,
@@ -19,7 +19,7 @@ import {
   FNAME_REQUIRED,
   CONFIRM_PASSWORD_ERROR,
   EMAIL_EXIST,
-} from "../../constants/Constants.js";
+} from "../../constants/constants.js";
 
 const Signup = () => {
   const {

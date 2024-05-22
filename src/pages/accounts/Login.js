@@ -13,9 +13,9 @@ import {
   PASSWORD_MAXLENGTH,
   PASSWORD_MINLENGTH,
   PASSWORD_REQUIRED,
-} from "../../constants/Constants.js";
+} from "../../constants/constants.js";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { AuthContext } from "../../context/AuthContext.js";
+import { AuthContext } from "../../context/authContext.js";
 
 const Login = () => {
   const {

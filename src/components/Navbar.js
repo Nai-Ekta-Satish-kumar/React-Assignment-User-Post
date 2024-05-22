@@ -9,7 +9,7 @@ import {
   Tab,
   Box,
 } from "@mui/material";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/authContext";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -19,7 +19,6 @@ const Navbar = () => {
   useEffect(() => {
     setLoggedInUser(user);
   }, [user]);
-  
 
   const handleLogout = () => {
     logout();
@@ -63,7 +62,7 @@ const Navbar = () => {
                 component={Link}
                 to="/"
                 variant="outlined"
-                sx={{ margin: 1, borderRadius: 10,color:'cyan' }}
+                sx={{ margin: 1, borderRadius: 10, color: "cyan" }}
               >
                 Login
               </Button>
@@ -71,7 +70,7 @@ const Navbar = () => {
                 component={Link}
                 to="/signup"
                 variant="outlined"
-                sx={{ margin: 1, borderRadius: 10,color:'cyan' }}
+                sx={{ margin: 1, borderRadius: 10, color: "cyan" }}
               >
                 SignUp
               </Button>
@@ -82,9 +81,8 @@ const Navbar = () => {
           <Button
             variant="outlined"
             size="small"
-            sx={{ marginX: 1, borderRadius: 10,color:'cyan' }}
+            sx={{ marginX: 1, borderRadius: 10, color: "cyan" }}
             onClick={handleLogout}
-          
           >
             Logout
           </Button>

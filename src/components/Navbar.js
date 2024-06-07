@@ -21,7 +21,7 @@ const Navbar = () => {
   }, [user]);
 
   const handleLogout = () => {
-    logout();
+    logout(!loggedInUser);
     navigate("/");
   };
 
@@ -43,7 +43,14 @@ const Navbar = () => {
                   sx={{ color: "white" }}
                 />
               </Tabs>
-
+              <Tabs>
+                <Tab
+                  component={Link}
+                  to="/adminPost"
+                  label="AdminPost"
+                  sx={{ color: "white" }}
+                />
+              </Tabs>
               <Tabs>
                 <Tab
                   component={Link}

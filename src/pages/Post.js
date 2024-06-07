@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchPosts, addPost, deletePost, editPost, addComment } from '../redux/reducer/PostsSlice';
 import { Card, CardContent, Box, Typography, Button, TextField, Modal } from '@mui/material';
 import { Edit as EditIcon, Delete as DeleteIcon, Add as AddIcon, Comment as CommentIcon, Save as SaveIcon } from '@mui/icons-material';
+
 const Post = () => {
   const dispatch = useDispatch();
   const items = useSelector(state => state.posts.items);
@@ -22,24 +23,42 @@ const Post = () => {
       dispatch(fetchPosts());
     }
   }, [dispatch]);
+
   const handleDelete = (id) => {
     dispatch(deletePost(id));
   };
+
   const handleEdit = (item) => {
     setEditItem(item);
     setEditTitle(item.title);
     setEditBody(item.body);
     setOpen(true);
   };
+
   const handleUpdate = () => {
-    dispatch(editPost({ ...editItem, title: editTitle, body: editBody }));
-    setOpen(false);
+    if (editItem && editItem.id) {
+      const updatedPost = { id: editItem.id, title: editTitle, body: editBody };
+      let storedPosts = JSON.parse(localStorage.getItem('posts'));
+      storedPosts = storedPosts.map(post => post.id === updatedPost.id ? updatedPost : post);
+      localStorage.setItem('posts', JSON.stringify(storedPosts));
+      dispatch({ type: 'posts/editPost/fulfilled', payload: updatedPost });
+      setOpen(false);
+    } else {
+      console.error('Edit item ID is missing');
+    }
   };
+
   const handleAddPost = (e) => {
     e.preventDefault();
-    dispatch(addPost({ title: newPost.title, body: newPost.body }));
+    const uniqueId = Date.now();  // Generate a unique ID based on the current timestamp
+    const newPostData = { id: uniqueId, title: newPost.title, body: newPost.body };
+    let storedPosts = JSON.parse(localStorage.getItem('posts')) || [];
+    storedPosts.push(newPostData);
+    localStorage.setItem('posts', JSON.stringify(storedPosts));
+    dispatch({ type: 'posts/addPost/fulfilled', payload: newPostData });
     setNewPost({ title: '', body: '' });
   };
+
   const handleAddComment = (postId) => {
     const commentText = commentInputs[postId];
     if (!commentText.trim()) return;
@@ -47,11 +66,14 @@ const Post = () => {
     setCommentInputs(prev => ({ ...prev, [postId]: '' }));
     setShowCommentInput(prev => ({ ...prev, [postId]: false }));
   };
+
   const handleCommentButtonClick = (postId) => {
     setShowCommentInput(prev => ({ ...prev, [postId]: true }));
   };
+
   const users = JSON.parse(localStorage.getItem('users')) || [];
   const user = users.map(user => user.name);
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2 }}>
       <form onSubmit={handleAddPost} style={{ marginBottom: '20px' }}>
@@ -159,4 +181,5 @@ const Post = () => {
     </Box>
   );
 };
+
 export default Post;

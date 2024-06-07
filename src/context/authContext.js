@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem("posts");
-    // localStorage.removeItem("users")
+   
   };
 
   return (

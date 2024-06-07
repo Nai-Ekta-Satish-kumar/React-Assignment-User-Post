@@ -9,6 +9,8 @@ import Navbar from './components/Navbar';
 import UserList from './pages/UserList';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './context/authContext';
+import PostAdmin from './pages/PostAdmin';
+import PostAdmDetails from './pages/accounts/PostAdmDetails';
 
 function App() {
   const { user} = useContext(AuthContext);
@@ -30,11 +32,12 @@ function App() {
             <>
              <Route path="/post" element={<Post />} />
              <Route path="/user" element={<UserList />} />
+             <Route path='/adminPost' element={<PostAdmin />}/>
+             <Route path='/detail/:id' element={<PostAdmDetails />}/>
             </>
           )}
     </Routes>
     <Toaster/>
-   
     </BrowserRouter>
   </div>
   );
